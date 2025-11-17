@@ -12,6 +12,7 @@ arc_2025_mindsai/
 ├── data/                     # raw + cleaned tasks (create as needed)
 ├── notebooks/                # demo notebooks (optional)
 ├── src/                      # solution code
+├── tpu/                      # tpu training scripts, hydra config
 ├── prepare_data.py           # entry point: data cleaning/copy
 ├── train.py                  # entry point: pretraining + fine-tuning
 ├── predict.py                # entry point: inference
@@ -108,3 +109,7 @@ The resulting `submission.json` (and scoring visuals under `scoring_visualizatio
   - `prompt`: serialized ARC prompt text (e.g., `solve: train input1 … output1 … test tinput1 …`). all output boards follow: `{total_chars} {height} {width} {symbols} …`. symbols are the unique symbols in the order they are encountered in the grid.
   - `correct_answer`: serialized target string (`{total_chars} {height} {width} {symbols} …`).
   The hosted dataset `mindware/arc-agi-mega` already exposes these columns, so setting `"MODEL_CONFIG_MODULES": "codet5_660m_arcmega"` automatically streams prompts from HuggingFace before TTFT/AIRV training.
+  
+### Extra Datasets
+
+- Extra datasets are used by the TPU trainer and not included here due to size.  They were uploaded to a kaggle dataset.
