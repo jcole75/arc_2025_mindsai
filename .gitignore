@@ -28,6 +28,8 @@ model_fine_tuned/
 model_pretrained/
 
 # Data caches and datasets
+data/clean/
+data/raw/
 data/pretrain/
 data/**/*.csv.gz
 tpu/training_datasets_extra/*.csv.gz

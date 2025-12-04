@@ -9,8 +9,8 @@ MindsAI ARC Prize 2025 solution:
 
 ```
 arc_2025_mindsai/
-├── data/                     # raw + cleaned tasks (create as needed)
-├── notebooks/                # demo notebooks (optional)
+├── data/                     # raw + cleaned tasks (ARC test sets)
+├── notebooks/                # notebooks
 ├── src/                      # solution code
 ├── tpu/                      # tpu training scripts, hydra config
 ├── prepare_data.py           # entry point: data cleaning/copy
@@ -112,4 +112,4 @@ The resulting `submission.json` (and scoring visuals under `scoring_visualizatio
   
 ### Extra Datasets
 
-- Extra datasets are used by the TPU trainer and not included here due to size.  They were uploaded to a kaggle dataset: https://www.kaggle.com/datasets/jcole75/mindsai-tufa-extra-datasets
+- Extra datasets are used by the TPU trainer and not included here due to size.  They were uploaded to a kaggle dataset.
