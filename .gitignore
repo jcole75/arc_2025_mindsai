@@ -10,6 +10,12 @@ __pycache__/
 .venv/
 venv/
 
+# Environment files with secrets
+.env
+.env.local
+.env.production
+.env.development
+
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
