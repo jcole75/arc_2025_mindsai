@@ -57,12 +57,6 @@ def prepare(settings_path: Path) -> None:
         path = Path(path_str).expanduser().resolve()
         path.mkdir(parents=True, exist_ok=True)
 
-    # Clean up legacy nested clean directories (clean/clean/…) created by older versions
-    stray = clean_dir / "clean"
-    if stray.exists():
-        print(f"Removing nested clean directory created by older prepare_data runs: {stray}")
-        shutil.rmtree(stray, ignore_errors=True)
-
     print("Data preparation complete.")
     print(f"Clean data directory: {clean_dir}")
     print(f"Train file: {train_clean}")
