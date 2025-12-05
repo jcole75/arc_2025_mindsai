@@ -10,6 +10,9 @@ __pycache__/
 .venv/
 venv/
 
+# Environment files with secrets
+.env
+
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
