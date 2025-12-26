@@ -1,0 +1,51 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environments
+.env/
+.venv/
+venv/
+
+# Environment files with secrets
+.env
+.env.local
+.env.production
+.env.development
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Logs and run outputs
+run_logs/
+training_logs/
+session_logs/
+scoring_visualizations/
+train_dataset_prepared/
+*.log
+
+# Model weights / large artifacts
+artifacts/
+model/
+model_fine_tuned/
+model_pretrained/
+
+# Data caches and datasets
+data/clean/
+data/raw/
+data/pretrain/
+data/**/*.csv.gz
+tpu/training_datasets_extra/*.csv.gz
+
+# Caches
+.cache/
+
+# Generated submission archives (keep latest JSON)
+submission/*.zip
+
+# OS files
+.DS_Store
+Thumbs.db

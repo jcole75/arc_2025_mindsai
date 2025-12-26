@@ -1,0 +1,125 @@
+
+# -------------------------
+# Default Hydra config YAML
+# -------------------------
+# Example execution:
+# sudo gcloud compute tpus tpu-vm ssh arc-v4-64 --zone=us-central2-b --worker=all      --command "python3 flax_train.py -cn train_code_large_aug.yaml"
+defaults:
+  - _self_
+
+data:
+  train_file_prefix: "training_datasets_prepared/resampled/sample_300000_items_"
+  max_prompt_tokens: 3400
+  max_answer_tokens: 1800
+  samples_per_epoch: 350000
+  is_tokenized: false
+  extra_datasets:
+    - filename: "./training_datasets_extra/reasoning_gym_300k.csv.gz"
+      percentage: 0.006
+    - filename: "./training_datasets_extra/synthetic_arc_dataset_20250717_191745_training_data_first_27_2k_ea.csv.gz"
+      percentage: 0.008
+    - filename: "./training_datasets_extra/train_human_soc_output_span_masked.csv.gz"
+      percentage: 0.002
+    - filename: "./training_datasets_extra/train_arc2_eval_augged.csv.gz"
+      percentage: 0.01
+
+model:
+  model_name_or_path: "./code_large"
+  use_fast_tokenizer: true
+  bfloat16: false
+  gradient_checkpointing: true
+  tokenizer_dropout_enabled: true
+  tokenizer_dropout_rate: 0.15
+  use_auth_token: false
+  cache_dir:
+
+train:
+  output_dir: "./code_large"
+  learning_rate: 4e-6
+  weight_decay: 0.01
+  label_smoothing_factor: 0.0
+  train_batch_size_per_device: 2
+  train_epochs: 192
+  corpus_repeats: 50
+  warmup_steps: 0
+  logging_steps: 100
+  save_steps: 1000
+  reset_lr_each_epoch: true
+  shuffle_training_data: true
+  random_dataset_order: true
+  current_epoch: 0
+  seed: 42
+  tqdm_all_hosts: true  # set true to render a bar per host
+
+mix:
+  non_arc_data_percentage: 0.25
+
+aug:
+  apply_span_masking: true
+  span_masking_apply_percentage: 0.05
+  span_masking_augmentation_count: 10
+  span_masking_min_percent: 0.01
+  span_masking_max_percent: 0.15
+  span_masking_include_answer_percent: 0.4
+  span_masking_preprompt_length: 0
+  sequential_parts_split: 0
+
+  prompt_reversal_percentage: 0.01
+  answer_reversal_percentage: 0.01
+  both_reversal_percentage: 0.01
+  apply_answer_reversal: true
+  answer_reversal_percent: 0.1
+
+  span_corruption_probability: 0.15
+  span_corruption_mean_length: 3
+  span_corruption_augmentation_probability: 0.1
+
+  # --- ARC-Specific Augmentations ---
+  use_arc_augmentations: true
+  arc_aug_apply_percentage: 0.05      # Percentage of ARC items to select for augmentation
+  arc_augs_per_item: 2                # Number of new examples to generate for each selected ARC item
+
+  geometric_color:
+    enabled: false
+    weight: 1.0
+
+  order:
+    enabled: false
+    weight: 0.5
+
+  mixup:
+    enabled: true
+    weight: 0.5
+    overlay_mode: bernoulli # bernoulli | replace_nonzero | add_mod
+    mix_ratio: 0.5
+    color_shift_increment: 1
+
+  input_output_swap:
+    enabled: true
+    weight: 0.2
+    swap_probability: 0.3
+
+  combine:
+    enabled: true
+    weight: 0.3
+    max_tasks_to_combine: 3
+    augment_train_pairs: true
+    methods: [horizontal, vertical, color_separator_horizontal, color_separator_vertical, grid_2x2]
+    separator_color: 9
+
+  mixup_combine:
+    enabled: false
+    weight: 0.4
+    max_tasks_to_combine: 2
+    augment_train_pairs: true
+    methods: [horizontal, vertical, color_separator_horizontal, color_separator_vertical]
+    separator_color: 9
+
+  # --- ARC augmentation logging controls ---
+  arc_aug_log_count: 50         # Set to 0 to disable all logging
+  arc_aug_log_dir: "./arc_aug_logs" # Directory to save logs
+  arc_aug_log_html: true        # Enable/disable the visual HTML report
+
+  # --- NEW: budget-aware augmentation goals ---
+  target_aug_fraction: null     # e.g., 0.35 to aim for ~35% augmented samples; null = auto
+  budget_slack_fraction: 0.15   # Over-sample base by +15% to absorb filtering/drops
